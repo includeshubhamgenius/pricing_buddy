@@ -4,6 +4,8 @@ import WhyPB from './WhyPB';
 import Footer from '../components/Footer';
 import MyIllustration from '../assets/Revenue-bro.svg';
 import FAQAccordion from './FAQAccordion';
+import Blogs from './Blogs';
+
 export default function Home() {
   return (
     <div className="pt-24 px-6 space-y-16">
@@ -31,17 +33,7 @@ export default function Home() {
 
       {/* Related Articles */}
       <section>
-        <h3 className="text-xl font-bold mb-4">Related Articles</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((n) => (
-            <div key={n} className="p-4 border rounded-xl shadow-sm">
-              <h4 className="font-semibold">Blog Title {n}</h4>
-              <p className="text-sm text-gray-500">Short description of the article goes here.</p>
-              <a href="https://www.indeed.com/career-advice/pay-salary/how-to-price-yourself-freelancer#:~:text=Use%20your%20research%20to%20help,were%20working%20a%20traditional%20job." className="text-blue-500 text-sm mt-2 inline-block">Read more →</a>
-
-            </div>
-          ))}
-        </div>
+        <Blogs/>
       </section>
 
       {/* Footer */}

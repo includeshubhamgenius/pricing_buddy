@@ -17,15 +17,16 @@ export default function WhyPB() {
     MarketImage
   ];
 
-  const imagePositions = [
-    'top-4 right-4',
-    'bottom-4 right-4',
-    'top-6 left-6',
-    'bottom-6 left-6',
-    'top-4 right-8',
-    'bottom-8 right-8',
-    'top-6 right-6'
-  ];
+  const imageStyles = [
+  { size: 'w-60 h-60', position: 'top-24 right-1' },
+  { size: 'w-20 h-20', position: 'bottom-4 right-4' },
+  { size: 'w-24 h-24', position: 'top-3 right-3' },
+  { size: 'w-20 h-20', position: 'bottom-4 right-4' },
+  { size: 'w-24 h-24', position: 'top-3 right-3' },
+  { size: 'w-20 h-20', position: 'bottom-4 right-4' },
+  { size: 'w-24 h-24', position: 'top-3 right-3' },
+  
+];
 
   return (
     <section className="w-full max-w-screen-xl mx-auto py-32 px-6">
@@ -42,10 +43,10 @@ export default function WhyPB() {
         {features.map((feature, index) => (
           <div
             key={index}
-            className={`bg-${feature.bg} rounded-2xl p-6 shadow-md relative overflow-hidden flex flex-col justify-between animate-pulse-slow ${feature.span}`}
+            className={`${feature.bg} rounded-2xl p-6 shadow-md relative overflow-hidden flex flex-col justify-between animate-pulse-slow ${feature.span}`}
           >
             <div
-              className={`absolute w-20 h-20 opacity-10 bg-cover bg-center ${imagePositions[index]}`}
+              className={`absolute ${imageStyles[index].size} bg-cover bg-center ${imageStyles[index].position}`}
               style={{ backgroundImage: `url(${imageMap[index]})` }}
             />
             <div className="relative z-10">
@@ -69,45 +70,40 @@ const features = [
     title: 'Beginner-Friendly UI',
     description: 'Simple, intuitive design ideal for new users starting out.',
     tag: 'ONLY AT RUUL',
-    bg: 'green-100',
-    span: 'col-span-2 row-span-1'
+    bg: 'bg-green-100',
+    span: 'col-span-2 row-span-2'
   },
   {
     title: 'Intelligent Rate Suggestions',
     description: 'Calculates hourly rate based on your goals, time, and market averages.',
-    bg: 'orange-100',
-    span: 'col-span-2 row-span-1 col-start-3'
+    bg: 'bg-orange-100',
+    span: 'col-span-2 row-span-2 col-start-3 row-start-2'
   },
   {
     title: 'Embeddable Widget (Coming Soon)',
     description: 'Use our widget in your own platform to bring the magic of pricing anywhere.',
     tag: 'ONLY AT RUUL',
-    bg: 'green-200',
-    span: 'col-span-2 row-span-2'
+    bg: 'bg-green-400',
+    span: 'col-span-2 row-span-2 col-start-5 row-start-3'
   },
-  {
-    title: 'Fastest payout delivery',
-    description: 'We ensure your payout is processed within just 1 day.',
-    bg: 'orange-200',
-    span: 'col-span-3 row-span-1'
-  },
+  
   {
     title: 'Transparent Quote Breakdown',
     description: 'Shows how the final quote is calculated to build client trust.',
-    bg: 'green-100',
+    bg: 'bg-green-100',
     span: 'col-span-3 row-span-2'
   },
   {
     title: 'AI-Powered Estimation',
     description: 'Trained with real project data to provide optimized pricing ranges.',
-    bg: 'orange-100',
+    bg: 'bg-orange-100',
     span: 'col-span-3 row-span-1'
   },
   {
     title: 'Localized Market Data',
     description: 'Uses regional metrics to generate more accurate suggestions.',
-    bg: 'green-200',
-    span: 'col-span-2 row-span-1 col-start-5'
+    bg: 'bg-green-200',
+    span: 'col-span-2 row-span-1 col-start-5 row-start-1'
   }
 ];
 

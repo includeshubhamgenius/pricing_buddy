@@ -15,7 +15,36 @@ const faqs = [
     question: "Is this tool free?",
     answer: "Yes, it's 100% free for freelancers.",
   },
+  {
+    question: "Can I share my quote with clients?",
+    answer: "Yes, you can copy or download a clean version to share professionally.",
+  },
+  {
+    question: "Do I need to sign up?",
+    answer: "No signup required — just open the tool and start estimating.",
+  },
+  {
+    question: "Is the AI model trained on real data?",
+    answer: "Yes, it's trained on real-world freelance project data and continuously improving.",
+  },
+  {
+    question: "Does it work for all industries?",
+    answer: "It's optimized for tech, design, writing, and marketing freelancers — more coming soon.",
+  },
+  {
+    question: "Can I customize the widget for my website?",
+    answer: "Yes, an embeddable and brand-customizable widget is coming soon.",
+  },
+  {
+    question: "How accurate are the market-based suggestions?",
+    answer: "We use the latest regional data and freelance platforms to stay relevant and reliable.",
+  },
+  {
+    question: "Will this remain free forever?",
+    answer: "The core tool will always be free. Premium features may be added in the future.",
+  }
 ];
+
 
 const FAQAccordion = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -26,7 +55,8 @@ const FAQAccordion = () => {
 
   return (
     <section className="max-w-2xl mx-auto p-6">
-      <h3 className="text-2xl font-bold mb-6">Frequently Asked Questions</h3>
+
+      <h3 className="text-3xl font-bold text-center mb-10">Frequently Asked Questions (FAQs) </h3>
       <ul className="space-y-4">
         {faqs.map((faq, index) => (
           <li
