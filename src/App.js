@@ -4,12 +4,14 @@ import Home from './pages/Home';
 import HowItWorks from './pages/HowItWorks';
 import Features from './pages/Features';
 import Pricing from './pages/Pricing';
+import ScrollToTop from "./components/ScrollToTop"; 
 
 import Calculator from './pages/Calculator';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen bg-gray-50 text-gray-900">
         <Navbar />
         <Routes>
