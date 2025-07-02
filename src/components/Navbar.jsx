@@ -23,10 +23,10 @@ export default function Navbar() {
   }, [location]);
 
   const linkStyle = ({ isActive }) => {
-    const baseStyle = "relative px-4 py-2 rounded-xl font-medium transition-all duration-200 ease-out";
+    const baseStyle = "relative text-sm px-4 py-2 rounded-lg font-medium transition-all duration-200 ease-out";
     return isActive
-      ? `${baseStyle} text-blue-600 bg-blue-50/80 backdrop-blur-xl`
-      : `${baseStyle} text-gray-700 hover:text-blue-600 hover:bg-gray-50/80`;
+      ? `${baseStyle} text-blue-600  bg-blue-50/80 backdrop-blur-xl`
+      : `${baseStyle} text-gray-700 font-light text-sm hover:text-blue-600 hover:bg-gray-50/80`;
   };
 
   const mobileMenuVariants = {
@@ -63,20 +63,27 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed w-full z-50 transition-all duration-300 ease-out ${
           isScrolled 
-            ? 'bg-white/90 backdrop-blur-xl shadow-lg border-b border-gray-100/50' 
-            : 'bg-white/70 backdrop-blur-md'
+            ? 'bg-none' 
+            : 'bg-none backdrop-blur-md'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
+          {/* Grid Layout for Even Spacing */}
+          <div className="grid grid-cols-3 items-center">
+            
+            {/* Logo - Left Section */}
             <motion.div 
-              className="flex items-center space-x-3"
+              className="flex items-center space-x-3 justify-self-start"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <img src={PBlogo} alt="PB" className="w-6 h-6 filter brightness-0 invert" />
+              {/* Logo with Glass Effect */}
+              <div className="border-[0.5px] border-white/20 rounded-2xl p-1 bg-white/10 backdrop-blur-sm shadow-xl">
+                <div className="border-[0.5px] border-black/50 rounded-xl p-2 bg-white/50 backdrop-blur-xl">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center rounded-lg shadow-lg">
+                    <img src={PBlogo} alt="PB" className="w-5 h-5 filter brightness-0 invert" />
+                  </div>
+                </div>
               </div>
               <div>
                 <h2 className="text-xl font-bold text-gray-900 tracking-tight">
@@ -85,68 +92,90 @@ export default function Navbar() {
               </div>
             </motion.div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-2">
-              <NavLink to="/" className={linkStyle}>
-                Home
-              </NavLink>
-              <NavLink to="/how-it-works" className={linkStyle}>
-                How it Works
-              </NavLink>
-              <NavLink to="/features" className={linkStyle}>
-                Features
-              </NavLink>
-              <NavLink to="/pricing" className={linkStyle}>
-                Pricing
-              </NavLink>
-              
-              {/* CTA Button */}
+            {/* Desktop Navigation - Center Section */}
+            <div className="hidden md:flex items-center justify-center">
+              <div className="border border-black/10 rounded-xl p-1 bg-white/10 backdrop-blur-sm shadow-xl">
+                <div className="border border-white/20 rounded-lg p-1 bg-white backdrop-blur-xl flex items-center gap-3">
+                  <NavLink to="/" className={({ isActive }) => isActive ? "relative text-xs px-2 py-1 rounded-md font-medium transition-all duration-200 ease-out text-blue-600 bg-blue-50/80 backdrop-blur-xl" : "relative text-xs px-2 py-1 rounded-md font-normal transition-all duration-200 ease-out text-gray-700 hover:text-blue-600 hover:bg-gray-50/80"}>
+                    Home
+                  </NavLink>
+                  <NavLink to="/how-it-works" className={({ isActive }) => isActive ? "relative text-xs px-2 py-1 rounded-md font-medium transition-all duration-200 ease-out text-blue-600 bg-blue-50/80 backdrop-blur-xl" : "relative text-xs px-2 py-1 rounded-md font-normal transition-all duration-200 ease-out text-gray-700 hover:text-blue-600 hover:bg-gray-50/80"}>
+                    How it Works
+                  </NavLink>
+                  <NavLink to="/features" className={({ isActive }) => isActive ? "relative text-xs px-2 py-1 rounded-md font-medium transition-all duration-200 ease-out text-blue-600 bg-blue-50/80 backdrop-blur-xl" : "relative text-xs px-2 py-1 rounded-md font-normal transition-all duration-200 ease-out text-gray-700 hover:text-blue-600 hover:bg-gray-50/80"}>
+                    Features
+                  </NavLink>
+                  <NavLink to="/pricing" className={({ isActive }) => isActive ? "relative text-xs px-2 py-1 rounded-md font-medium transition-all duration-200 ease-out text-blue-600 bg-blue-50/80 backdrop-blur-xl" : "relative text-xs px-2 py-1 rounded-md font-normal transition-all duration-200 ease-out text-gray-700 hover:text-blue-600 hover:bg-gray-50/80"}>
+                    Pricing
+                  </NavLink>
+                </div>
+              </div>
+            </div>
+            
+            {/* CTA Button - Right Section */}
+            <div className="hidden md:flex justify-self-end">
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <NavLink 
-                  to="/calculator" 
-                  className="ml-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 ease-out"
-                >
-                  Try Calculator
-                </NavLink>
+                {/* Auth Buttons with Glass Effect */}
+                <div className="border border-black/10 rounded-xl p-1 bg-white/10 backdrop-blur-sm shadow-xl">
+                  <div className="border border-white/20 rounded-lg p-1 bg-white backdrop-blur-xl flex items-center gap-0.5">
+                    {/* Login Button */}
+                    <NavLink 
+                      to="/login" 
+                      className="relative text-xs px-2 py-1 rounded-md font-normal transition-all duration-200 ease-out text-gray-700 hover:text-blue-600 hover:bg-gray-50/80"
+                    >
+                      Log in
+                    </NavLink>
+                    {/* Sign Up Button with Gradient */}
+                    <NavLink 
+                      to="/signup" 
+                      className="relative text-xs px-2 py-1 rounded-md font-medium transition-all duration-200 ease-out bg-gradient-to-r from-blue-500 to-pink-500 text-white shadow-lg hover:shadow-xl hover:from-blue-600 hover:to-pink-600"
+                    >
+                      Sign up
+                    </NavLink>
+                  </div>
+                </div>
               </motion.div>
             </div>
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100/80 backdrop-blur-xl"
-            >
-              <motion.div
-                animate={isMobileMenuOpen ? "open" : "closed"}
-                className="w-5 h-5 flex flex-col justify-center items-center"
+            {/* Mobile Menu Button - Right Section (Mobile Only) */}
+            <div className="md:hidden justify-self-end">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100/80 backdrop-blur-xl"
               >
-                <motion.span
-                  variants={{
-                    closed: { rotate: 0, y: 0 },
-                    open: { rotate: 45, y: 2 }
-                  }}
-                  className="w-5 h-0.5 bg-gray-700 rounded-full block origin-center transition-all duration-200"
-                />
-                <motion.span
-                  variants={{
-                    closed: { opacity: 1 },
-                    open: { opacity: 0 }
-                  }}
-                  className="w-5 h-0.5 bg-gray-700 rounded-full block mt-1 transition-all duration-200"
-                />
-                <motion.span
-                  variants={{
-                    closed: { rotate: 0, y: 0 },
-                    open: { rotate: -45, y: -2 }
-                  }}
-                  className="w-5 h-0.5 bg-gray-700 rounded-full block mt-1 origin-center transition-all duration-200"
-                />
-              </motion.div>
-            </motion.button>
+                <motion.div
+                  animate={isMobileMenuOpen ? "open" : "closed"}
+                  className="w-5 h-5 flex flex-col justify-center items-center"
+                >
+                  <motion.span
+                    variants={{
+                      closed: { rotate: 0, y: 0 },
+                      open: { rotate: 45, y: 2 }
+                    }}
+                    className="w-5 h-0.5 bg-gray-700 rounded-full block origin-center transition-all duration-200"
+                  />
+                  <motion.span
+                    variants={{
+                      closed: { opacity: 1 },
+                      open: { opacity: 0 }
+                    }}
+                    className="w-5 h-0.5 bg-gray-700 rounded-full block mt-1 transition-all duration-200"
+                  />
+                  <motion.span
+                    variants={{
+                      closed: { rotate: 0, y: 0 },
+                      open: { rotate: -45, y: -2 }
+                    }}
+                    className="w-5 h-0.5 bg-gray-700 rounded-full block mt-1 origin-center transition-all duration-200"
+                  />
+                </motion.div>
+              </motion.button>
+            </div>
+
           </div>
         </div>
       </motion.nav>

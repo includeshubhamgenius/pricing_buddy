@@ -10,6 +10,8 @@ import {
   Target,
   TrendingUp
 } from 'lucide-react';
+import RevenueBro from '../assets/Revenue-bro.svg';
+import MarketSVG from '../assets/market.svg';
 
 // Enhanced UI Components matching Calculator.jsx and Home.jsx style
 const Card = ({ children, className = "", delay = 0 }) => (
@@ -153,27 +155,31 @@ export default function HowItWorks() {
           <div className="absolute -top-40 -right-32 w-96 h-96 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl"></div>
           <div className="absolute -bottom-40 -left-32 w-96 h-96 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
         </div>
-
-        <div className="relative z-10 max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
-              How Pricing Buddy
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Works</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-              A smart, transparent approach to freelance pricing that puts you in control of your financial future.
-            </p>
-            <Button onClick={handleTryNowClick}>Try It Now</Button>
-          </motion.div>
+        <div className="relative z-10 max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10">
+          <div className="flex-1 flex justify-center">
+            <img src={RevenueBro} alt="How it works visual" className="w-[320px] md:w-[400px] drop-shadow-xl rounded-3xl" />
+          </div>
+          <div className="flex-1">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+            >
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
+                How Pricing Buddy
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Works</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+                A smart, transparent approach to freelance pricing that puts you in control of your financial future.
+              </p>
+              <Button onClick={handleTryNowClick} className="mt-2">Try It Now</Button>
+            </motion.div>
+          </div>
         </div>
       </motion.section>
 
-      {/* Steps Section */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
+      {/* Steps Timeline Section */}
+      <section className="py-24 px-6 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -188,23 +194,40 @@ export default function HowItWorks() {
             From confused about rates to confident in your worth — in just minutes.
           </p>
         </motion.div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, index) => (
-            <StepCard
-              key={index}
-              icon={step.icon}
-              title={step.title}
-              description={step.description}
-              stepNumber={step.stepNumber}
-              delay={0.1 * index}
-              isComingSoon={step.isComingSoon}
-            />
-          ))}
+        <div className="relative">
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 via-purple-200 to-pink-200 rounded-full -translate-x-1/2" />
+          <div className="space-y-16 relative z-10">
+            {steps.map((step, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 * index }}
+                className={`flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}
+              >
+                <div className="flex-1 flex justify-center">
+                  <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center shadow-lg">
+                    <step.icon className="w-12 h-12 text-blue-600" />
+                  </div>
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <div className="inline-block px-4 py-1 mb-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold shadow">
+                    Step {step.stepNumber}
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-2">{step.title}</h3>
+                  <p className="text-gray-600 text-base mb-2">{step.description}</p>
+                  {step.isComingSoon && (
+                    <span className="inline-block mt-2 px-3 py-1 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 text-white text-xs font-semibold shadow">Coming Soon</span>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Zig-Zag Section */}
       <section className="py-24 px-6 bg-gradient-to-br from-blue-50/50 to-purple-50/50">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -221,16 +244,24 @@ export default function HowItWorks() {
               Every feature is designed around the real challenges freelancers face when pricing their work.
             </p>
           </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-16">
             {features.map((feature, index) => (
-              <FeatureHighlight
+              <motion.div
                 key={index}
-                icon={feature.icon}
-                title={feature.title}
-                description={feature.description}
-                delay={0.1 * index}
-              />
+                initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 * index }}
+                className={`flex flex-col md:flex-row items-center gap-10 ${index % 2 === 0 ? '' : 'md:flex-row-reverse'}`}
+              >
+                <div className="flex-1 flex justify-center">
+                  <img src={MarketSVG} alt="Feature visual" className="w-[220px] md:w-[300px] drop-shadow-xl rounded-2xl" />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <h4 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h4>
+                  <p className="text-gray-600 text-base mb-2">{feature.description}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -238,7 +269,8 @@ export default function HowItWorks() {
 
       {/* Process Visualization */}
       <section className="py-24 px-6 max-w-5xl mx-auto">
-        <Card className="p-12 text-center">
+        <Card className="p-12 text-center flex flex-col items-center gap-8">
+          <img src={RevenueBro} alt="Process visual" className="w-[220px] md:w-[320px] drop-shadow-xl rounded-2xl mb-4" />
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -257,7 +289,7 @@ export default function HowItWorks() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 text-center text-gray-500 text-sm">
+      <footer className="py-12 text-center text-gray-500 text-sm bg-gray-50 border-t border-gray-200/50">
         © {new Date().getFullYear()} Pricing Buddy. All rights reserved.
       </footer>
     </div>

@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, 
@@ -9,28 +9,83 @@ import {
   Zap,
   ChevronDown,
   Users,
-  DollarSign
+  DollarSign,
+  Star,
+  Sparkles,
+  Target,
+  Award
 } from 'lucide-react';
 
-// Enhanced UI Components matching Calculator.jsx style
-const Card = ({ children, className = "", delay = 0 }) => (
+// Floating Elements Component
+const FloatingElements = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Animated gradient orbs */}
+      <motion.div
+        animate={{
+          x: [0, 100, 0],
+          y: [0, -50, 0],
+          scale: [1, 1.2, 1],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute top-20 left-10 w-48 h-48 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-2xl"
+      />
+      
+      <motion.div
+        animate={{
+          x: [0, -80, 0],
+          y: [0, 60, 0],
+          scale: [1, 0.8, 1],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2
+        }}
+        className="absolute top-40 right-20 w-48 h-48 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-xl"
+      />
+
+      
+
+     
+
+      
+    </div>
+  );
+};
+
+// Enhanced UI Components
+const Card = ({ children, className = "", delay = 0, hover = true }) => (
   <motion.div 
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.6, ease: "easeOut", delay }}
-    className={`bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 ${className}`}
+    whileHover={hover ? { y: -5, scale: 1.02 } : {}}
+    className={`bg-gradient-to-br from-white via-blue-50 to-purple-100/80 rounded-3xl shadow-xl border border-blue-100/60 hover:shadow-2xl transition-all duration-300 ${className}`}
   >
     {children}
   </motion.div>
 );
 
-const Button = ({ children, onClick, variant = "primary", className = "", ...props }) => {
-  const baseClasses = "inline-flex items-center justify-center px-8 py-4 rounded-2xl font-semibold text-base transition-all duration-200 ease-out transform cursor-pointer";
+const Button = ({ children, onClick, variant = "primary", className = "", size = "default", ...props }) => {
+  const baseClasses = "inline-flex items-center justify-center rounded-2xl font-semibold transition-all duration-200 ease-out transform cursor-pointer relative overflow-hidden";
+  
+  const sizes = {
+    small: "px-6 py-3 text-sm",
+    default: "px-8 py-4 text-base",
+    large: "px-10 py-5 text-lg"
+  };
+  
   const variants = {
-    primary: "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]",
-    secondary: "bg-white/90 backdrop-blur-xl text-gray-700 border border-gray-200 hover:bg-white hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]",
-    ghost: "text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl"
+    primary: "bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/20 before:via-transparent before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-700",
+    secondary: "bg-white/95 backdrop-blur-xl text-gray-700 border border-gray-200/50 hover:bg-white hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] hover:border-blue-200",
+    ghost: "text-gray-600 hover:text-gray-900 hover:bg-gray-50/80 rounded-xl backdrop-blur-sm"
   };
   
   return (
@@ -38,7 +93,7 @@ const Button = ({ children, onClick, variant = "primary", className = "", ...pro
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className={`${baseClasses} ${variants[variant]} ${className}`}
+      className={`${baseClasses} ${sizes[size]} ${variants[variant]} ${className}`}
       {...props}
     >
       {children}
@@ -46,74 +101,105 @@ const Button = ({ children, onClick, variant = "primary", className = "", ...pro
   );
 };
 
-const FeatureCard = ({ icon: Icon, title, description, delay = 0 }) => (
-  <Card delay={delay} className="p-8 text-center hover:shadow-2xl transition-all duration-300">
-    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-      <Icon className="w-8 h-8 text-blue-600" />
-    </div>
-    <h3 className="text-xl font-semibold text-gray-900 mb-3">{title}</h3>
+const FeatureCard = ({ icon: Icon, title, description, delay = 0, gradient = "from-blue-500 to-purple-500" }) => (
+  <Card delay={delay} className="p-8 text-center group">
+    <motion.div 
+      whileHover={{ scale: 1.1, rotate: 5 }}
+      className={`w-16 h-16 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg`}
+    >
+      <Icon className="w-8 h-8 text-white" />
+    </motion.div>
+    <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">{title}</h3>
     <p className="text-gray-600 leading-relaxed">{description}</p>
   </Card>
 );
 
-const StatCard = ({ value, label, delay = 0 }) => (
+const StatCard = ({ value, label, delay = 0, icon: Icon }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.8 }}
     whileInView={{ opacity: 1, scale: 1 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay }}
-    className="text-center"
+    className="text-center group"
   >
-    <div className="text-3xl font-bold text-blue-600 mb-2">{value}</div>
-    <div className="text-sm text-gray-600 font-medium">{label}</div>
+    <motion.div 
+      whileHover={{ scale: 1.05 }}
+      className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 mb-4 border border-blue-100/50"
+    >
+      {Icon && <Icon className="w-8 h-8 text-blue-600 mx-auto mb-3" />}
+      <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+        {value}
+      </div>
+      <div className="text-sm text-gray-600 font-medium">{label}</div>
+    </motion.div>
   </motion.div>
 );
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => (
-  <Card className="overflow-hidden">
+  <div className={`transition-all duration-300 border border-gray-200 rounded-xl mb-2 bg-white shadow-sm ${isOpen ? 'shadow-md' : ''}`}> 
     <button
       onClick={onClick}
-      className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-gray-50/50 transition-colors"
+      className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none focus:ring-2 focus:ring-blue-100 rounded-xl group"
     >
-      <span className="font-semibold text-gray-900">{question}</span>
-      <motion.div
+      <span className="font-medium text-gray-900 text-base group-hover:text-blue-600 transition-colors">{question}</span>
+      <motion.span
         animate={{ rotate: isOpen ? 180 : 0 }}
         transition={{ duration: 0.2 }}
+        className="ml-4 flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 group-hover:bg-blue-50 transition-colors"
       >
-        <ChevronDown className="w-5 h-5 text-gray-500" />
-      </motion.div>
+        <ChevronDown className={`w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors`} />
+      </motion.span>
     </button>
     <motion.div
       initial={false}
-      animate={{ height: isOpen ? "auto" : 0 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
       className="overflow-hidden"
     >
-      <div className="px-8 pb-6 text-gray-600 leading-relaxed">
+      <div className="px-5 pb-4 pt-0 text-gray-600 text-sm leading-relaxed">
         {answer}
       </div>
     </motion.div>
-  </Card>
+  </div>
 );
 
 const BlogCard = ({ title, excerpt, readTime, category, delay = 0 }) => (
-  <Card delay={delay} className="p-6 hover:shadow-2xl transition-all duration-300 cursor-pointer group">
-    <div className="flex items-center justify-between mb-4">
-      <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-        {category}
-      </span>
-      <span className="text-xs text-gray-500">{readTime} min read</span>
-    </div>
-    <h3 className="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-      {title}
-    </h3>
-    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-      {excerpt}
-    </p>
-    <div className="mt-4 flex items-center text-blue-600 text-sm font-medium group-hover:translate-x-1 transition-transform">
-      Read more <ArrowRight className="w-4 h-4 ml-1" />
+  <Card delay={delay} className="p-6 cursor-pointer group overflow-hidden relative">
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-purple-50/0 group-hover:from-blue-50/50 group-hover:to-purple-50/50 transition-all duration-300" />
+    <div className="relative z-10">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-xs font-semibold text-blue-600 bg-gradient-to-r from-blue-50 to-blue-100 px-3 py-1 rounded-full border border-blue-200/50">
+          {category}
+        </span>
+        <span className="text-xs text-gray-500">{readTime} min read</span>
+      </div>
+      <h3 className="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+        {title}
+      </h3>
+      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
+        {excerpt}
+      </p>
+      <motion.div 
+        whileHover={{ x: 5 }}
+        className="flex items-center text-blue-600 text-sm font-medium"
+      >
+        Read more <ArrowRight className="w-4 h-4 ml-1" />
+      </motion.div>
     </div>
   </Card>
+);
+
+// Trust Badge Component
+const TrustBadge = ({ icon: Icon, text, delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay }}
+    className="flex items-center gap-2 bg-white/80 backdrop-blur-xl rounded-lg px-3 py-2 shadow-lg border border-white/30"
+  >
+    <Icon className="w-4 h-4 text-blue-600" />
+    <span className="text-xs font-medium text-gray-700">{text}</span>
+  </motion.div>
 );
 
 export default function Home() {
@@ -163,117 +249,201 @@ export default function Home() {
     }
   ];
 
+  const features = [
+    {
+      icon: Calculator,
+      title: "Smart Calculator",
+      description: "Built with freelancing-specific logic to help you price accurately and confidently.",
+      gradient: "from-blue-500 to-cyan-500"
+    },
+    {
+      icon: TrendingUp,
+      title: "Market Awareness",
+      description: "Compare your rates with the industry to ensure you're staying competitive.",
+      gradient: "from-purple-500 to-pink-500"
+    },
+    {
+      icon: Shield,
+      title: "Transparent & Secure",
+      description: "Your data stays private and we never share your info with anyone.",
+      gradient: "from-green-500 to-teal-500"
+    },
+    {
+      icon: Zap,
+      title: "Instant Results",
+      description: "No sign-ups needed. Get your pricing insights in seconds.",
+      gradient: "from-yellow-500 to-orange-500"
+    },
+    {
+      icon: Users,
+      title: "For All Freelancers",
+      description: "Supports multiple domains: design, dev, content, video, and more.",
+      gradient: "from-indigo-500 to-purple-500"
+    },
+    {
+      icon: DollarSign,
+      title: "Fair Valuation",
+      description: "Stop guessing your worth. Start charging what you truly deserve.",
+      gradient: "from-emerald-500 to-blue-500"
+    }
+  ];
+
+  const stats = [
+    { value: "25,000+", label: "Calculations Done", icon: Calculator },
+    { value: "10,000+", label: "Freelancers Served", icon: Users },
+    { value: "95%", label: "Satisfaction Rate", icon: Star }
+  ];
+
   const handleCalculatorClick = () => {
     navigate('/calculator');
   };
 
   const handleHowItWorksClick = () => {
-     navigate('/how-it-works');
+    navigate('/how-it-works');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Hero Section */}
       <motion.section 
         style={{ y: heroY, opacity: heroOpacity }}
         className="relative pt-32 pb-20 px-6 text-center overflow-hidden"
       >
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-32 w-96 h-96 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-32 w-96 h-96 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl"></div>
-        </div>
-
+        {/* Dynamic Background (Hero Only) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-100/20 via-purple-100/20 to-pink-100/20 animate-pulse" style={{ animationDuration: '8s' }} />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(59,130,246,0.15),transparent_50%),radial-gradient(ellipse_at_bottom_right,rgba(147,51,234,0.15),transparent_50%),radial-gradient(ellipse_at_center,rgba(236,72,153,0.1),transparent_70%)]" />
+        <FloatingElements />
         <div className="relative z-10 max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 tracking-tight">
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 px-6 py-3 rounded-full mb-8 border border-blue-200/50 backdrop-blur-xl"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span className="text-sm font-semibold">Trusted by 10,000+ freelancers</span>
+            </motion.div>
+
+            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 mt-6 tracking-tight">
               Price with
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Confidence</span>
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent"> Confidence</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
               Stop undervaluing your work. Get personalized hourly rates based on your skills, 
               expenses, and market position.
-                        </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button onClick={handleCalculatorClick}>
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Button onClick={handleCalculatorClick} size="default">
+                <Calculator className="w-5 h-5 mr-2" />
                 Launch Calculator
               </Button>
-              <Button onClick={handleHowItWorksClick} variant="secondary">
+              <Button onClick={handleHowItWorksClick} variant="secondary" size="default">
                 How It Works
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="flex flex-wrap justify-center gap-4 mt-8">
+              <TrustBadge icon={Shield} text="100% Private & Secure" delay={0.3} />
+              <TrustBadge icon={Zap} text="Instant Results" delay={0.4} />
+              <TrustBadge icon={Award} text="Industry Trusted" delay={0.5} />
             </div>
           </motion.div>
         </div>
       </motion.section>
 
       {/* Features Section */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-          Why Freelancers Love Pricing Buddy
-        </h2>
+      <section className="py-24 px-6 max-w-7xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Why Freelancers Love Pricing Buddy
+          </h2>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Powerful features designed specifically for modern freelancers
+          </p>
+        </motion.div>
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <FeatureCard
-            icon={Calculator}
-            title="Smart Calculator"
-            description="Built with freelancing-specific logic to help you price accurately and confidently."
-            delay={0.1}
-          />
-          <FeatureCard
-            icon={TrendingUp}
-            title="Market Awareness"
-            description="Compare your rates with the industry to ensure you're staying competitive."
-            delay={0.2}
-          />
-          <FeatureCard
-            icon={Shield}
-            title="Transparent & Secure"
-            description="Your data stays private and we never share your info with anyone."
-            delay={0.3}
-          />
-          <FeatureCard
-            icon={Zap}
-            title="Instant Results"
-            description="No sign-ups needed. Get your pricing insights in seconds."
-            delay={0.4}
-          />
-          <FeatureCard
-            icon={Users}
-            title="For All Freelancers"
-            description="Supports multiple domains: design, dev, content, video, and more."
-            delay={0.5}
-          />
-          <FeatureCard
-            icon={DollarSign}
-            title="Fair Valuation"
-            description="Stop guessing your worth. Start charging what you truly deserve."
-            delay={0.6}
-          />
+          {features.map((feature, idx) => (
+            <FeatureCard
+              key={idx}
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+              gradient={feature.gradient}
+              delay={0.1 * idx}
+            />
+          ))}
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-purple-50 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12">
-            Empowering Thousands of Freelancers
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
-            <StatCard value="25,000+" label="Calculations Done" delay={0.1} />
-            <StatCard value="10,000+" label="Freelancers Served" delay={0.2} />
-            <StatCard value="95%" label="Satisfaction Rate" delay={0.3} />
+      <section className="py-20 px-6 relative z-10">
+        <div className="max-w-4xl mx-auto">
+          {/* Background decoration */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-3xl backdrop-blur-xl border border-white/20" />
+          
+          <div className="relative z-10 text-center py-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Empowering Thousands of Freelancers
+              </h2>
+              <p className="text-xl text-gray-600">
+                Join the community of successful freelancers
+              </p>
+            </motion.div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              {stats.map((stat, idx) => (
+                <StatCard 
+                  key={idx}
+                  value={stat.value} 
+                  label={stat.label} 
+                  icon={stat.icon}
+                  delay={0.1 * idx} 
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 px-6 max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-          Frequently Asked Questions
-        </h2>
+      <section className="py-24 px-6 max-w-4xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-xl text-gray-600">
+            Everything you need to know about Pricing Buddy
+          </p>
+        </motion.div>
+        
         <div className="space-y-4">
           {faqs.map((faq, idx) => (
             <FAQItem
@@ -288,10 +458,22 @@ export default function Home() {
       </section>
 
       {/* Blog Section */}
-      <section className="py-24 px-6 max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-          Learn & Grow as a Freelancer
-        </h2>
+      <section className="py-24 px-6 max-w-6xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Learn & Grow as a Freelancer
+          </h2>
+          <p className="text-xl text-gray-600">
+            Expert insights and tips to boost your freelancing success
+          </p>
+        </motion.div>
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {blogs.map((blog, idx) => (
             <BlogCard
@@ -307,8 +489,16 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} Pricing Buddy. All rights reserved.
+      <footer className="py-12 text-center text-gray-500 text-sm relative z-10 border-t border-gray-200/50 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Calculator className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-semibold text-gray-700">Pricing Buddy</span>
+          </div>
+          <p>© {new Date().getFullYear()} Pricing Buddy. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
