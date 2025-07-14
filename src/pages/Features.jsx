@@ -99,21 +99,29 @@ export default function Features() {
       {/* Features Grid */}
       <section className="flex-1 px-4 pb-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
-          {features.map((feature, idx) => (
-            <GlassCard key={idx} delay={0.1 * idx} accent={feature.accent}>
-              <div className="flex flex-col items-center">
-                <div className="w-14 h-14 flex items-center justify-center mb-4 rounded-2xl bg-white/60 shadow-inner">
-                  <feature.icon className="w-8 h-8 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">{feature.title}</h3>
-                <p className="text-gray-600 text-center text-base mb-2">{feature.description}</p>
-                <div className="mt-2 flex items-center justify-center text-green-600 text-xs font-medium">
-                  <CheckCircle className="w-4 h-4 mr-1" />
-                  Available
-                </div>
-              </div>
-            </GlassCard>
-          ))}
+          {features.map((feature, idx) => {
+  const isComingSoon =
+    feature.title === "Export & Save" || feature.title === "Professional Quotes";
+
+  return (
+    <GlassCard key={idx} delay={0.1 * idx} accent={feature.accent}>
+      <div className="flex flex-col items-center">
+        <div className="w-14 h-14 flex items-center justify-center mb-4 rounded-2xl bg-white/60 shadow-inner">
+          <feature.icon className="w-8 h-8 text-blue-600" />
+        </div>
+        <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">{feature.title}</h3>
+        <p className="text-gray-600 text-center text-base mb-2">{feature.description}</p>
+        <div className={`mt-2 flex items-center justify-center text-xs font-medium ${
+          isComingSoon ? 'text-yellow-600' : 'text-green-600'
+        }`}>
+          <CheckCircle className="w-4 h-4 mr-1" />
+          {isComingSoon ? "Coming Soon" : "Available"}
+        </div>
+      </div>
+    </GlassCard>
+  );
+})}
+
         </div>
       </section>
 

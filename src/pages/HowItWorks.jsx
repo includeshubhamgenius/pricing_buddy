@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import RevenueBro from '../assets/Revenue-bro.svg';
 import MarketSVG from '../assets/market.svg';
+import GrowthPNG from '../assets/GrowthPNG.png';
 
 // Enhanced UI Components matching Calculator.jsx and Home.jsx style
 const Card = ({ children, className = "", delay = 0 }) => (
@@ -255,7 +256,7 @@ export default function HowItWorks() {
                 className={`flex flex-col md:flex-row items-center gap-10 ${index % 2 === 0 ? '' : 'md:flex-row-reverse'}`}
               >
                 <div className="flex-1 flex justify-center">
-                  <img src={MarketSVG} alt="Feature visual" className="w-[220px] md:w-[300px] drop-shadow-xl rounded-2xl" />
+                  <img src={GrowthPNG} alt="Feature visual" className="w-[220px] md:w-[300px] drop-shadow-xl rounded-2xl" />
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <h4 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h4>
