@@ -1,5 +1,7 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState } from 'react';
+import EnhancedFAQSection from './EnhancedFAQSection'
+import Blogs from './Blogs'
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, 
@@ -7,12 +9,10 @@ import {
   TrendingUp, 
   Shield, 
   Zap,
-  ChevronDown,
   Users,
   DollarSign,
   Star,
   Sparkles,
-  Target,
   Award
 } from 'lucide-react';
 
@@ -101,17 +101,33 @@ const Button = ({ children, onClick, variant = "primary", className = "", size =
   );
 };
 
-const FeatureCard = ({ icon: Icon, title, description, delay = 0, gradient = "from-blue-500 to-purple-500" }) => (
-  <Card delay={delay} className="p-8 text-center group">
-    <motion.div 
-      whileHover={{ scale: 1.1, rotate: 5 }}
-      className={`w-16 h-16 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg`}
-    >
-      <Icon className="w-8 h-8 text-white" />
-    </motion.div>
-    <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">{title}</h3>
-    <p className="text-gray-600 leading-relaxed">{description}</p>
-  </Card>
+const FeatureCard = ({ icon: Icon, title, description, gradient = "from-blue-500 to-purple-500" }) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.3, ease: "easeOut" }}
+    whileHover={{ y: -8, scale: 1.02 }}
+    className="relative p-8 text-center group cursor-pointer"
+  >
+    {/* Glass morphic background */}
+    <div className="absolute inset-0 bg-white/40 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl group-hover:shadow-3xl transition-all duration-500" />
+    
+    {/* Gradient overlay on hover */}
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 via-purple-50/0 to-pink-50/0 group-hover:from-blue-50/30 group-hover:via-purple-50/20 group-hover:to-pink-50/30 rounded-3xl transition-all duration-500" />
+    
+    {/* Subtle border glow */}
+    <div className="absolute inset-0 bg-gradient-to-br from-blue-400/0 via-purple-400/0 to-pink-400/0 group-hover:from-blue-400/20 group-hover:via-purple-400/20 group-hover:to-pink-400/20 rounded-3xl blur-xl transition-all duration-500" />
+    
+    {/* Content */}
+    <div className="relative z-10">
+      <div className={`w-16 h-16 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+        <Icon className="w-8 h-8 text-white" />
+      </div>
+      <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">{title}</h3>
+      <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">{description}</p>
+    </div>
+  </motion.div>
 );
 
 const StatCard = ({ value, label, delay = 0, icon: Icon }) => (
@@ -135,59 +151,6 @@ const StatCard = ({ value, label, delay = 0, icon: Icon }) => (
   </motion.div>
 );
 
-const FAQItem = ({ question, answer, isOpen, onClick }) => (
-  <div className={`transition-all duration-300 border border-gray-200 rounded-xl mb-2 bg-white shadow-sm ${isOpen ? 'shadow-md' : ''}`}> 
-    <button
-      onClick={onClick}
-      className="w-full flex items-center justify-between px-5 py-4 text-left focus:outline-none focus:ring-2 focus:ring-blue-100 rounded-xl group"
-    >
-      <span className="font-medium text-gray-900 text-base group-hover:text-blue-600 transition-colors">{question}</span>
-      <motion.span
-        animate={{ rotate: isOpen ? 180 : 0 }}
-        transition={{ duration: 0.2 }}
-        className="ml-4 flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 group-hover:bg-blue-50 transition-colors"
-      >
-        <ChevronDown className={`w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors`} />
-      </motion.span>
-    </button>
-    <motion.div
-      initial={false}
-      animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="overflow-hidden"
-    >
-      <div className="px-5 pb-4 pt-0 text-gray-600 text-sm leading-relaxed">
-        {answer}
-      </div>
-    </motion.div>
-  </div>
-);
-
-const BlogCard = ({ title, excerpt, readTime, category, delay = 0 }) => (
-  <Card delay={delay} className="p-6 cursor-pointer group overflow-hidden relative">
-    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/0 to-purple-50/0 group-hover:from-blue-50/50 group-hover:to-purple-50/50 transition-all duration-300" />
-    <div className="relative z-10">
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-xs font-semibold text-blue-600 bg-gradient-to-r from-blue-50 to-blue-100 px-3 py-1 rounded-full border border-blue-200/50">
-          {category}
-        </span>
-        <span className="text-xs text-gray-500">{readTime} min read</span>
-      </div>
-      <h3 className="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-        {title}
-      </h3>
-      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
-        {excerpt}
-      </p>
-      <motion.div 
-        whileHover={{ x: 5 }}
-        className="flex items-center text-blue-600 text-sm font-medium"
-      >
-        Read more <ArrowRight className="w-4 h-4 ml-1" />
-      </motion.div>
-    </div>
-  </Card>
-);
 
 // Trust Badge Component
 const TrustBadge = ({ icon: Icon, text, delay = 0 }) => (
@@ -428,64 +391,13 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 px-6 max-w-4xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-xl text-gray-600">
-            Everything you need to know about Pricing Buddy
-          </p>
-        </motion.div>
-        
-        <div className="space-y-4">
-          {faqs.map((faq, idx) => (
-            <FAQItem
-              key={idx}
-              question={faq.question}
-              answer={faq.answer}
-              isOpen={openFAQ === idx}
-              onClick={() => setOpenFAQ(openFAQ === idx ? null : idx)}
-            />
-          ))}
-        </div>
+      <section className="py-24 w-full relative z-10">
+       <EnhancedFAQSection/>
       </section>
 
       {/* Blog Section */}
       <section className="py-24 px-6 max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Learn & Grow as a Freelancer
-          </h2>
-          <p className="text-xl text-gray-600">
-            Expert insights and tips to boost your freelancing success
-          </p>
-        </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {blogs.map((blog, idx) => (
-            <BlogCard
-              key={idx}
-              title={blog.title}
-              excerpt={blog.excerpt}
-              readTime={blog.readTime}
-              category={blog.category}
-              delay={0.1 * idx}
-            />
-          ))}
-        </div>
+        <Blogs/>
       </section>
 
       {/* Footer */}

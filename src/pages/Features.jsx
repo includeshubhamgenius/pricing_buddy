@@ -7,7 +7,8 @@ import {
   Settings,
   Download,
   Smartphone,
-  Users,
+  Loader, 
+  Clock,
   CheckCircle
 } from 'lucide-react';
 
@@ -63,12 +64,6 @@ const features = [
     description: "Works perfectly on any device.",
     accent: "from-cyan-400 to-blue-400"
   },
-  {
-    icon: Users,
-    title: "Freelancer-First",
-    description: "Designed for freelancers, by freelancers.",
-    accent: "from-fuchsia-400 to-pink-400"
-  }
 ];
 
 export default function Features() {
@@ -112,11 +107,21 @@ export default function Features() {
         <h3 className="text-xl font-semibold text-gray-900 mb-2 text-center">{feature.title}</h3>
         <p className="text-gray-600 text-center text-base mb-2">{feature.description}</p>
         <div className={`mt-2 flex items-center justify-center text-xs font-medium ${
-          isComingSoon ? 'text-yellow-600' : 'text-green-600'
-        }`}>
-          <CheckCircle className="w-4 h-4 mr-1" />
-          {isComingSoon ? "Coming Soon" : "Available"}
-        </div>
+  isComingSoon ? 'text-blue-600' : 'text-green-600'
+}`}>
+  {isComingSoon ? (
+    <>
+      <Clock className="w-4 h-4 mr-1 animate-pulse" />
+      Coming Soon
+    </>
+  ) : (
+    <>
+      <CheckCircle className="w-4 h-4 mr-1" />
+      Available
+    </>
+  )}
+</div>
+
       </div>
     </GlassCard>
   );
