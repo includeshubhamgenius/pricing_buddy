@@ -1,7 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import PBlogo from '../assets/PBlogo.png';
+import PBlogo from '../assets/PBLogo2.png';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -77,18 +77,19 @@ export default function Navbar() {
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
-              {/* Logo with Glass Effect */}
-              <div className="border-[0.5px] border-white/20 rounded-2xl p-1 bg-white/10 backdrop-blur-sm shadow-xl">
-                <div className="border-[0.5px] border-black/50 rounded-xl p-2 bg-white/50 backdrop-blur-xl">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center rounded-lg shadow-lg">
-                    <img src={PBlogo} alt="PB" className="w-5 h-5 filter brightness-0 invert" />
+              {/* Logo with Glass Effect - Circular */}
+              <div className="border border-black/10 rounded-xl p-1 bg-white/10 backdrop-blur-sm shadow-xl">
+              
+                  <div className="px-2 py-1 bg-white/90 backdrop-blur-xl flex items-center justify-center rounded-lg shadow-lg">
+                    <img src={PBlogo} alt="PB" className="mr-2  w-8 h-8" />
+                    <h2 className="text-xl font-bold text-gray-900 tracking-tight ">
+                  Pricing<span className="text-blue-600 font-lobster">Buddy</span>
+                </h2>
                   </div>
-                </div>
+                
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900 tracking-tight">
-                  Pricing <span className="text-blue-600">Buddy</span>
-                </h2>
+                
               </div>
             </motion.div>
 

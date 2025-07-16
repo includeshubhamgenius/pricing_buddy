@@ -7,7 +7,10 @@ module.exports = {
     extend: {
          fontFamily: {
         jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+        dancing: ['"Dancing Script"', 'cursive'],
+        lobster: ['"Lobster"', 'cursive'],
       },
+
       
        animation: {
         sparkle: 'sparkle 1.5s linear infinite',
