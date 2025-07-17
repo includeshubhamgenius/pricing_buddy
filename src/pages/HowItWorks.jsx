@@ -10,9 +10,15 @@ import {
   Target,
   TrendingUp
 } from 'lucide-react';
-import RevenueBro from '../assets/Revenue-bro.svg';
+import RevenueBro from '../assets/moneyGrowth.svg';
 import MarketSVG from '../assets/market.svg';
-import GrowthPNG from '../assets/GrowthPNG.png';
+
+
+// Add imports for different images - you'll need to replace these with your actual image paths
+import IntelligenceImage from '../assets/industry.svg'; // For Industry-Specific Intelligence
+import GoalImage from '../assets/ready.svg'; // For Goal-Oriented Pricing
+import TrendImage from '../assets/GrowthPNG.png'; // For Growth-Ready Rates
+
 
 // Enhanced UI Components matching Calculator.jsx and Home.jsx style
 const Card = ({ children, className = "", delay = 0 }) => (
@@ -131,17 +137,20 @@ export default function HowItWorks() {
     {
       icon: Sparkles,
       title: "Industry-Specific Intelligence",
-      description: "Pre-loaded market rates for web development, design, content writing, and more specialized fields."
+      description: "Pre-loaded market rates for web development, design, content writing, and more specialized fields.",
+      image: IntelligenceImage
     },
     {
       icon: Target,
       title: "Goal-Oriented Pricing",
-      description: "Set your lifestyle and financial goals, and we'll help you price to achieve them sustainably."
+      description: "Set your lifestyle and financial goals, and we'll help you price to achieve them sustainably.",
+      image: GoalImage
     },
     {
       icon: TrendingUp,
       title: "Growth-Ready Rates",
-      description: "Build in room for skill development and market changes so your rates grow with your expertise."
+      description: "Build in room for skill development and market changes so your rates grow with your expertise.",
+      image: TrendImage
     }
   ];
 
@@ -256,13 +265,13 @@ export default function HowItWorks() {
                 className={`flex flex-col md:flex-row items-center gap-10 ${index % 2 === 0 ? '' : 'md:flex-row-reverse'}`}
               >
                 <div className="flex-1 flex justify-center">
-                  <img src={GrowthPNG} alt="Feature visual" className="w-[220px] md:w-[300px] drop-shadow-xl rounded-2xl" />
+                  <img src={feature.image} alt={`${feature.title} visual`} className={`w-[220px] md:w-[300px] drop-shadow-xl rounded-2xl ${feature.title === 'Goal-Oriented Pricing' ? 'scale-x-[-1]' : ''}`} />
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <h4 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h4>
                   <p className="text-gray-600 text-base mb-2">{feature.description}</p>
                 </div>
-              </motion.div>
+             </motion.div>
             ))}
           </div>
         </div>
@@ -271,7 +280,7 @@ export default function HowItWorks() {
       {/* Process Visualization */}
       <section className="py-24 px-6 max-w-5xl mx-auto">
         <Card className="p-12 text-center flex flex-col items-center gap-8">
-          <img src={RevenueBro} alt="Process visual" className="w-[220px] md:w-[320px] drop-shadow-xl rounded-2xl mb-4" />
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
